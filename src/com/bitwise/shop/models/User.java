@@ -1,5 +1,10 @@
 package com.bitwise.shop.models;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope("session")
 public class User {
 	private String username;
 	private String password;
@@ -54,4 +59,3 @@ public class User {
 		return true;
 	}
 }
-

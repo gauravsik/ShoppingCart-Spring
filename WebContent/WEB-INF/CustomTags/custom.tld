@@ -8,7 +8,13 @@
 	
 	<tag>
 		<name>printProducts</name>
-		<tag-class>com.bitwise.shop.customs.PrintProducts</tag-class>
+		<tag-class>com.bitwise.shop.helpers.PrintProducts</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	
+	<tag>
+		<name>displayCart</name>
+		<tag-class>com.bitwise.shop.helpers.DisplayCart</tag-class>
 		<body-content>empty</body-content>
 	</tag>
 

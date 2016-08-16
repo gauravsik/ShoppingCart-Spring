@@ -2,60 +2,90 @@ package com.bitwise.shop.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.bitwise.shop.models.User;
-import com.bitwise.shop.models.UserValidator;
-import com.bitwise.shop.models.Users;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import com.bitwise.shop.models.OutOfStockException;
+import com.bitwise.shop.models.Product;
+import com.bitwise.shop.models.ShoppingCart;
 
 @Controller
+// @Scope("session")
 public class WebController {
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String showLoginPage(ModelMap model) {
-		User user = new User();
-		model.addAttribute("user", user);
-		return "login";
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String authorizeUserFisrt(ModelMap model, @ModelAttribute("user") User user, BindingResult result, HttpSession session,
-			HttpServletRequest request, HttpServletResponse response) {
-		String url = "login";
-		url = checkInput(model, user, result, url, request, response);
-		return (url);
-	}
+	@Autowired
+	private ShoppingCart cart;
+	private Product pro;
+//	private Order order;
 	
 	@RequestMapping(value = "/products", method = RequestMethod.GET)
-	public String displayProducts(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
-		return "products";
+	public ModelAndView displayProducts(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+
+		return new ModelAndView("products", "cart", cart);
 	}
 
-	private String checkInput(ModelMap model, User user, BindingResult result, String url, HttpServletRequest request,
-			HttpServletResponse response) {
-		UserValidator validator = new UserValidator();
-		validator.validate(user, result);
-		url = authenticateUser(model, user, result, url, request, response);
-		return url;
+	@RequestMapping(value = "/viewcart", method = RequestMethod.GET)
+	public ModelAndView displayCart(ModelMap model, HttpServletRequest request, HttpServletResponse response) {
+	
+		return new ModelAndView("viewcart", "cart", cart);
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public ModelAndView addProductToCart(ModelMap model, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam Integer productId) {
+
+		System.out.println("pid = " + productId);
+		String action = "add";
+		pro = cart.getProductById(productId, action);
+		int cartSize = cart.addProductToCart(pro);
+		
+		System.out.println("cart size = " + cartSize);
+		return new ModelAndView("products", "cart", cart);
+	}
+
+	@RequestMapping(value = "/remove", method = RequestMethod.GET)
+	public ModelAndView removeProductFromCart(ModelMap model, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam Integer productId) {
+		System.out.println(req.getRequestURI());
+		System.out.println(productId);
+		String action = "remove";
+		pro = cart.getProductById(productId, action);
+		int cartSize = cart.removeProductFromCart(pro);
+		System.out.println("cart size = " + cartSize);
+		return new ModelAndView("viewcart", "cart", cart);
+	}
+
+	@RequestMapping(value = "/placeorder", method = RequestMethod.GET)
+	public ModelAndView placeOrder(ModelMap model, HttpServletRequest req, HttpServletResponse res) {
+		System.out.println(req.getRequestURI());
+		double orderAmount = cart.getCartValue();
+		System.out.println("amount " + orderAmount);
+		return new ModelAndView("placeorder", "cart", cart);
+	}
+	
+	@ExceptionHandler(OutOfStockException.class)
+	public ModelAndView handleCustomException(OutOfStockException o) {
+
+		ModelAndView model = new ModelAndView("exception");
+//		model.addObject("errCode", ex.getErrCode());
+//		model.addObject("errMsg", ex.getErrMsg());
+		model.addObject("exceptionMsg", o.getExceptionMsg());
+		return model;
 
 	}
-	private String authenticateUser(ModelMap model, User user, BindingResult result, String url,
-			HttpServletRequest request, HttpServletResponse response) {
-		System.out.println(user.getUsername());
-		System.out.println(user.getPassword());
-		if (result.hasErrors()) {
-			model.addAttribute("user", user);
-			url = "login";
-		} else if (new Users().getUsers().contains(user)) {
-			url = "redirect:/products";
-		} else {
-			model.addAttribute("error", "invalidUser");
-		}
-		return url;
+
+	@ExceptionHandler(Exception.class)
+	public ModelAndView handleAllException(Exception ex) {
+
+		ModelAndView model = new ModelAndView("exception");
+		model.addObject("exceptionMsg", "oops Something went wrong!");
+
+		return model;
+
 	}
+
 }
