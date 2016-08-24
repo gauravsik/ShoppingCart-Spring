@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="false" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -15,7 +16,7 @@
 	<form:form commandName="user" method="POST" action="login">
 		<table>
 			<tr>
-				<td><span class="red-text text-darken-2"> 
+				<td>
 				<c:if test="${ not empty error }">Invalid Credentials</c:if>
 				</span>
 				</td>
@@ -32,7 +33,7 @@
 			</tr>
 			<tr>
 				<td></td>
-				<td colspan="2"><input class="btn blue" type="submit" value="Submit" /></td>
+				<td colspan="2"><input type="submit" value="Submit" /></td>
 			</tr>
 		</table>
 	</form:form>

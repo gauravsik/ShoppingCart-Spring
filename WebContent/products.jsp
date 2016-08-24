@@ -1,11 +1,10 @@
-<%@page import="com.bitwise.shop.models.Product"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@taglib prefix="products" uri="/WEB-INF/CustomTags/custom.tld"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@page session="false" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,24 +49,23 @@ color: #336699;
 <h1>Products</h1>
 	
 	<a href="<c:url value="/index"/>">Home</a>
-	<a href="<c:url value="/viewcart"/>">ViewCart</a>
+	<a href="<c:url value="/shop/viewcart"/>">ViewCart</a>
 	<table>
 		<tr>
 			<td>Product ID</td>
 			<td>Product Name</td>
 			<td>Product Price</td>
-			<td>Product Supplier</td>
 			<td>Product Stock</td>
 			<td>Action</td>
 		</tr>
-		<c:forEach items="${cart.getProductsList()}" var="item">
+		<c:forEach items="${shop.getProducts()}" var="item">
+		
 			<tr>
-				<td><c:out value="${item.getPID()}"></c:out></td>
-				<td><c:out value="${item.getProdName()}"></c:out></td>
-				<td><c:out value="${item.getProdPrice()}"></c:out></td>
-				<td><c:out value="${item.getSupplier()}"></c:out></td>
+				<td><c:out value="${item.getPid()}"></c:out></td>
+				<td><c:out value="${item.getPname()}"></c:out></td>
+				<td><c:out value="${item.getPrice()}"></c:out></td>
 				<td><c:out value="${item.getStock()}"></c:out></td>
-				<td><a href='/ShoppingCart/add?productId=${item.getPID()}'>ADD</a></td>
+				<td><a href='/OnlineShopping/shop/add?pid=${item.getPid()}'>ADD</a></td>
 			</tr>
 		</c:forEach>
 	</table>
