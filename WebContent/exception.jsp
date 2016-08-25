@@ -3,10 +3,29 @@
 <%@page session="false" %>
 <html>
 <head>
+<style type="text/css">
+#nav{
+margin-left: 450px;
+}
+a:link, a:visited {
+    background-color: #336699;
+    color: white;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+   	
+}
+h1{
+text-align: center;
+color: #336699;
+}
+</style>
 <title>Exception/Error</title>
 </head>
+
 <body>
-	<c:out value="${exceptionMsg}"></c:out>
+	<h1><c:out value="${exceptionMsg}"></c:out></h1>
 	<a href="<c:url value="/shop/products"/>">Products</a>
 </body>
 </html>
