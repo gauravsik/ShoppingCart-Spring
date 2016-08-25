@@ -6,12 +6,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-
+<style type="text/css">
+table{
+margin-left: 525px;
+}
+a:link, a:visited {
+    background-color: #336699;
+    color: white;
+    padding: 14px 25px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block;
+   	
+}
+h1{
+text-align: center;
+color: #336699;
+}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login</title>
 </head>
 <body>
-	<h2>Login To Continue</h2>
+	<h1>Login To Continue</h1>
 
 	<form:form commandName="user" method="POST" action="login">
 		<table>

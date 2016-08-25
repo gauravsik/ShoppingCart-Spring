@@ -25,13 +25,14 @@ public class AuthFilter implements Filter {
 		System.out.println("filter started");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		System.out.println(req.getSession().toString());
-		if (req.getSession(false)== null) {
+		
+		if (req.getSession(false) != null) {
+			chain.doFilter(request, response);
 			System.out.println("in auth filter if");
-			res.sendRedirect("login");
+
 		} else {
 			System.out.println("in auth filter else");
-			chain.doFilter(request, response);
+			res.sendRedirect("/OnlineShopping/index");
 		}
 	}
 
